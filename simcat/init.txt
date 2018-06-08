@@ -1,0 +1,4 @@
+\\ Respect the order of this file
+cat_name = 'My_First_Catalogue'
+fieldSize = 5.0
+logMcut = 8.0
