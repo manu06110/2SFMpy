@@ -81,6 +81,45 @@ def gen_massQUI(logMmin, z, dV, Omega):
 
 	return logM, Ngal
 
+#-------------------------------------------------------
+# Generate SFR for SF and Qui gal (Schreiber+17 and +18)
+#-------------------------------------------------------
+def genSFR(z, logM, SF):
+
+	SFR = np.zeros(len(SF))
+	SFRms = np.zeros(len(SF))
+	# SF gal
+	o = np.where(SF == 1.0)[0]
+	extraTerm = logM[o]-9.36-2.5*np.log10(1.+z[o])
+	extraTerm[extraTerm < 0] = 0
+
+	logSFRms = logM[o] - 9.5 + 1.5 * np.log10(1.+z[o]) - \
+			   0.3 * extraTerm**2.
+	logSFR = np.random.normal(logSFRms, 0.3, len(logSFRms))
+	SB = np.ones(len(logSFRms))
+	SBsel = np.array(np.random.rand(int(0.03*len(SB))) * len(SB), dtype = int)
+	SB[SBsel] = 2.0
+
+	SF[o] = SB
+	SFR[o] = 10**logSFR
+	SFRms[o] = 10**logSFRms
+
+	# Qui gal
+	o = np.where(SF == 0.0)[0]
+	logSFRms = 0.5*logM[o] + np.log10(1.+z[o]) - 6.1
+	logSFR = np.random.normal(logSFRms, 0.45, len(logSFRms))
+	SFR[o] = 10**logSFR
+
+	SFR[SF == 2.0] *= 4.
+
+	return SFR, SFRms
+
+
+
+
+
+
+
 
 
 

@@ -78,14 +78,14 @@ for z_i, dz_i, dV_i in zip(z, dz, dV):
 	SF.append(SF_i)
 	Ngal += N_i
 
-# Generate SFR 
-
-
 logM = np.hstack(logM)
 zgal = np.hstack(zgal)
 SF = np.hstack(SF)
 ID = np.linspace(1,Ngal,Ngal, dtype = int)
 
-result_dict = {'ID' : ID, 'z' : zgal, 'logM' : logM, 'type' : SF}
-df = pd.DataFrame(result_dict, columns = ['ID', 'z', 'logM', 'type'])
+# Generate SFR 
+SFR, SFRms = genSFR(zgal, logM, SF)
+
+result_dict = {'ID' : ID, 'z' : zgal, 'logM' : logM, 'SFR' : SFR, 'SFRms' : SFRms, 'type' : SF}
+df = pd.DataFrame(result_dict, columns = ['ID', 'z', 'logM', 'SFR', 'SFRms', 'type'])
 df.to_csv('../catalogues/'+catName+'.csv', index = False)
